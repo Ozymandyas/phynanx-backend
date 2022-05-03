@@ -1,0 +1,151 @@
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: query
+      name: apiKey
+  schemas:
+    Record:
+      type: object
+      properties:
+        id:
+          type: string
+          description: the auto-generated id of a record
+        company:
+          type: string
+          description: the returned company name
+        date:
+          type: string
+          description: the date on which the record has been published
+      example:
+        _id: 62349ac9370e9818d87496fe
+        id: 287208
+        dateMiseEnLigne: 2022-03-03T17:17:03.050Z
+        societe: MOULINVEST
+        path: 2022/2022DD824282/8F8BC608C48F0BFFCD0E73985E3D3F36C577A8506EF78E90CB6ED80E6EB220B9.pdf
+        typesDocument: DeclarationDirigeants
+        score: 4.733683109283447
+    RecordNotFound:
+      type: object
+      properties:
+        msg: test
+        type: string
+        description: a message for the not found record
+      example:
+        msg: Record not found
+    Search:
+      type: object
+      properties:
+        company:
+          type: string
+          description: the returned company name
+        date:
+          type: string
+          description: the date on which the record has been published
+      required:
+        - company
+      example:
+        company: Moulinvest
+        date: 23/02/2021
+    RecordComplete:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: database id
+        dateCreation:
+          type: string
+          description: date description
+        numero:
+          type: string
+          description: numero record
+        typesOperation:
+          type: array
+          description: jsp
+      example:
+        _id: 62349ac9370e9818d87496fe
+        dateCreation: '2022-03-03T17:17:03.243Z'
+        numero: 2022DD824282
+        typesOperation: []
+        documents:
+          - accessible: true
+            path: >-
+              2022/2022DD824282/8F8BC608C48F0BFFCD0E73985E3D3F36C577A8506EF78E90CB6ED80E6EB220B9.pdf
+            numero: null
+            format: null
+            details:
+              - date: '2022-03-03T12:38:02Z'
+                content_type: application/pdf
+                language: fr
+                title: INFORMATION
+                content_length: 1911
+            docRegulateur: true
+            nomFichier: DD_22_824282_8930546.pdf
+            dateReception: null
+        datePublication: '2022-03-03T17:17:03.641Z'
+        roleRegulateur: Document
+        indexYear: 2022
+        id: 287208
+        numeroConcatene: 2022DD824282
+        domaine: DOP
+        typesDocument:
+          - DeclarationDirigeants
+        typesInformation:
+          - DD
+        dateMiseEnLigne: '2022-03-03T17:17:03.050Z'
+        dateInformation: '2022-03-02T23:00:00.000Z'
+        langue: FR
+        regulateur: AMF
+        relations: []
+        societes:
+          - role: SocieteConcernee
+            raisonSociale: MOULINVEST
+            jeton: RS00005249
+        createdAt: '2022-03-18T14:44:25.790Z'
+        updatedAt: '2022-03-18T14:44:25.790Z'
+        __v: 0
+    FuzzySearch:
+      type: object
+      properties:
+        company:
+          type: string
+          description: the searched company
+      required:
+        - company
+      example:
+        company: LAGARDERE
+    FuzzyResult:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: result of fuzzy search
+        score:
+          type: number
+          description: attributed score
+      example:
+        - _id: LAGARDERE SCA
+          score: 3.737520456314087
+        - _id: LAGARDERE
+          score: 3.474980354309082
+        - _id: LAGARDERE SA
+          score: 3.474980354309082
+        - _id: LAGARDERE ACTIVE BROADCAST
+          score: 2.720676898956299
+        - _id: LEGUIDE.COM
+          score: 2.3382949829101562
+        - _id: HACHETTE FILIPACCHI MEDIAS
+          score: 2.0096170902252197
+        - _id: DOCTISSIMO
+          score: 2.0096170902252197
+        - _id: SAINT GOBAIN
+          score: 2.0096170902252197
+
+tags:
+  - name: Records
+    description: Records endpoint
+  - name: Companies
+    description: Companies endpoint
+
+security:
+  - ApiKeyAuth: []
