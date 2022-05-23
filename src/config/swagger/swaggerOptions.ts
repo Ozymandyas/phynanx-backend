@@ -8,7 +8,7 @@ export const options = {
     },
     servers: [
       {
-        url: 'http://localhost:8080/api/v1',
+        url: 'https://phynanx-backend.herokuapp.com/api/v1',
       },
     ],
   },
