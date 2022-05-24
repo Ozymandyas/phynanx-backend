@@ -5,7 +5,6 @@ import crypto from 'crypto'
 import * as admin from 'firebase-admin'
 
 const db = admin.firestore()
-const auth = admin.auth()
 
 /* the api key flow is as follow: first a key is generated at request 
  when a token is sent to the backend to prove that the user exists
@@ -16,37 +15,27 @@ const auth = admin.auth()
  checked against the database to see if it exists */
 
 export const generateAPIKeys: Handler = async (req, res) => {
-  let token
   try {
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer')
-    ) {
-      token = await auth.verifyIdToken(
-        req.headers['authorization'].split(' ')[1]
-      )
-    } else {
-      return res.status(401).send({ error: 'invalid request' })
-    }
-  } catch (error: any) {
-    console.log(error)
-    if (error.code == 'auth/argument-error') {
-      return res.status(500).json(error)
-    }
-    return res.status(500).json(error)
-  }
+    console.log('IN CONTROLLER')
+    const email = req.body.email
+    const uuid = randomUUID()
+    const uuidBase64 = Buffer.from(uuid).toString('base64')
+    const hash = crypto.createHash('sha1').update(uuidBase64).digest('base64')
+    console.log('END HASH')
 
-  const email = req.body.email
-  const uuid = randomUUID()
-  const uuidBase64 = Buffer.from(uuid).toString('base64')
-  const hash = crypto.createHash('sha1').update(uuidBase64).digest('base64')
-  const querySnapshot = await db
-    .collection('users')
-    .where('email', '==', email)
-    .get()
-  await db
-    .collection('users')
-    .doc(querySnapshot.docs[0].id)
-    .update({ api: hash })
-  return res.status(200).send({ apiKeyUnhashed: uuidBase64 })
+    const querySnapshot = await db
+      .collection('users')
+      .where('email', '==', email)
+      .get()
+    console.log('END QUERYSNAPSHOT')
+    await db
+      .collection('users')
+      .doc(querySnapshot.docs[0].id)
+      .update({ api: hash })
+    console.log('END DB UPDATE')
+    return res.status(200).send({ apiKeyUnhashed: uuidBase64 })
+  } catch (error) {
+    console.log(error)
+    return res.status(500).send({ error: 'unexpected error' })
+  }
 }

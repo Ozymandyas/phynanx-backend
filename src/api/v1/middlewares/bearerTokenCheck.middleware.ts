@@ -11,9 +11,11 @@ export const bearerTokenCheck: Handler = async (req, res, next) => {
       req.headers.authorization &&
       req.headers.authorization.startsWith('Bearer')
     ) {
+      console.log('BEGIN BEARERTOKENCHECK')
       token = await auth.verifyIdToken(
         req.headers['authorization'].split(' ')[1]
       )
+      console.log('END BEARERTOKENCHECK')
       next()
     } else {
       return res.status(401).send({ error: 'invalid request' })
