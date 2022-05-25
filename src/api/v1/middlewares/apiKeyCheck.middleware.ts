@@ -6,9 +6,8 @@ import * as admin from 'firebase-admin'
 const db = admin.firestore()
 
 export const apiKeyCheck: Handler = async (req, res, next) => {
-  if (req.query.apiKey) {
-    const apiKeyBase64 = req.query.apiKey as string
-    // const apiKeyHex = Buffer.from(apiKeyBase64, 'base64').toString('utf-8')
+  if (req.query.api_key) {
+    const apiKeyBase64 = req.query.api_key as string
     const apiKeyBase64Hashed = crypto
       .createHash('sha1')
       .update(apiKeyBase64)

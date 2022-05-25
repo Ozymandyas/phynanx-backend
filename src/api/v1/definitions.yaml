@@ -142,10 +142,10 @@ components:
           score: 2.0096170902252197
 
 tags:
-  - name: Records
-    description: Records endpoint
-  - name: Companies
-    description: Companies endpoint
+  - name: Admin
+    description: Admin endpoint
+  - name: Income Splitting
+    description: Compute income splitting endpoint
 
 security:
   - ApiKeyAuth: []
