@@ -12,6 +12,7 @@ export const apiKeyCheck: Handler = async (req, res, next) => {
       .createHash('sha1')
       .update(apiKeyBase64)
       .digest('base64')
+
     try {
       const querySnapshot = await db
         .collection('users')

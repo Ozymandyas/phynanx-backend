@@ -3,6 +3,7 @@
  */
 
 import express from 'express'
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 // Swagger
 import swaggerUI from 'swagger-ui-express'
@@ -31,11 +32,12 @@ app.use(
     xssFilter: false,
   })
 )
+app.use(cookieParser())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(
   cors({
-    origin: ['https://www.phynanx.com'],
+    origin: ['https://www.phynanx.com', 'http://localhost:3000'],
     credentials: true,
   })
 )
@@ -52,9 +54,18 @@ const optionsUI = {
 }
 
 // Routes
+import rateLimit from 'express-rate-limit'
 
-// import routesPartsSociales from './api/v1/routes/routes'
-// app.use('/api/v1', routesFrance)
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300, // Limit each IP to 300 requests per `window` (here, per 15 minutes)
+  message: 'Too many requests',
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+// Apply the rate limiting middleware to API calls only
+app.use('/api', apiLimiter)
 
 import routesAccount from './api/v1/routes/account/generatorAPI.route'
 // route for generating api Keys
